@@ -3,7 +3,10 @@ name: WordPress CI/CD Deployment
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull request to main branch
 
 jobs:
   trigger-terraform:
