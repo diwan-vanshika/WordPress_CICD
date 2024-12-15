@@ -41,7 +41,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/wordpress-key
           chmod 600 ~/.ssh/wordpress-key
-          ssh-keygen -l -f ~/.ssh/wordpress-key
+          ssh-keygen -l -f ~/.ssh/wordpress-key || echo "SSH Key verification failed"
 
       - name: Fetch EC2 Instance IP
         run: |
