@@ -1,7 +1,8 @@
 name: Ansible WordPress Deployment
 
 on:
-  workflow_call:
+  workflow_dispatch:  # Allows manual triggering
+  workflow_call:      # Allows calling from other workflows
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -49,17 +50,11 @@ jobs:
       
       - name: Update Ansible Inventory
         run: |
-          # Ensure the inventory file exists and is writable
           mkdir -p ansible/inventory
-          touch ansible/inventory/hosts
-          
-          # Update the inventory with the specific EC2 instance details
-          cat > ansible/inventory/hosts << EOL
+          cat > ansible/inventory/hosts << EOF
 [wordpress_servers]
 ${{ env.EC2_IP }} ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/wordpress-key ansible_python_interpreter=/usr/bin/python3
-EOL
-          
-          # Display the inventory for verification
+EOF
           cat ansible/inventory/hosts
       
       - name: Verify SSH Connection
@@ -74,4 +69,4 @@ EOL
             -e ansible_ssh_common_args='-o StrictHostKeyChecking=no' \
             --private-key=~/.ssh/wordpress-key
         env:
-          ANSIBLE_HOST_KEY_CHECKING: False
+          ANSIBLE_HOST_KEY_CHECKING: 'False'
