@@ -1,33 +1,14 @@
-name: WordPress Deployment
+name: WordPress CI/CD Deployment
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Set up Minikube
-      uses: medyagh/setup-minikube@master
-    
-    - name: Deploy to Minikube
-      run: |
-        kubectl apply -f k8s/wordpress/wordpress-secrets.yaml
-        kubectl apply -f k8s/wordpress/mysql-pvc.yaml
-        kubectl apply -f k8s/wordpress/wordpress-pvc.yaml
-        kubectl apply -f k8s/wordpress/mysql-deployment.yaml
-        kubectl apply -f k8s/wordpress/mysql-service.yaml
-        kubectl apply -f k8s/wordpress/wordpress-deployment.yaml
-        kubectl apply -f k8s/wordpress/wordpress-service.yaml
-    
-    - name: Wait for deployment
-      run: |
-        kubectl rollout status deployment/wordpress
-        kubectl rollout status deployment/mysql
+  trigger-terraform:
+    uses: ./.github/workflows/terraform-deploy.yml
+
+  trigger-ansible:
+    uses: ./.github/workflows/ansible-configure.yml
+    needs: trigger-terraform
