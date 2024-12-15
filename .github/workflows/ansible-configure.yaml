@@ -1,42 +1,44 @@
 name: Ansible Configuration
 on:
-  workflow_run:
-    workflows: ["WordPress Terraform Deployment"]
-    types:
-      - completed
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
 
 jobs:
   ansible-configure:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.9'
-
+      
       - name: Install Ansible
         run: |
           python -m pip install --upgrade pip
           pip install ansible boto3 botocore
-
+      
       - name: Configure AWS Credentials for Ansible
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
+      
       - name: Fetch EC2 Instance IP
         run: |
           EC2_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=WordPress-Server" --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
           echo "EC2_IP=$EC2_IP" >> $GITHUB_ENV
-
+      
       - name: Update Ansible Inventory
         run: |
           sed -i "s/{{ EC2_PUBLIC_IP }}/${{ env.EC2_IP }}/g" ansible/inventory/hosts
-
+      
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i ansible/inventory/hosts ansible/playbooks/wordpress-setup.yaml
