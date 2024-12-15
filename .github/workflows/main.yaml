@@ -6,7 +6,7 @@ on:
 
 jobs:
   trigger-terraform:
-    uses: ./.github/workflows/terraform-deploy.yaml
+    uses: /.github/workflows/terraform-deploy.yaml
     with:
       # Any input parameters for the reusable workflow
     secrets:
@@ -15,7 +15,7 @@ jobs:
   
   trigger-ansible:
     needs: trigger-terraform
-    uses: ./.github/workflows/ansible-configure.yaml
+    uses: /.github/workflows/ansible-configure.yaml
     with:
       # Any input parameters
     secrets:
