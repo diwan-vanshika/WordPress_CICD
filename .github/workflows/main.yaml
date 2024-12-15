@@ -7,7 +7,7 @@ on:
 
 jobs:
   trigger-terraform:
-    uses: .github/workflows/terraform-deploy.yaml
+    uses: ./.github/workflows/terraform-deploy.yaml
     with:
       aws-region: us-east-1
     secrets:
@@ -16,7 +16,7 @@ jobs:
 
   trigger-ansible:
     needs: trigger-terraform
-    uses: .github/workflows/ansible-configure.yaml
+    uses: ./.github/workflows/ansible-configure.yaml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
