@@ -1,5 +1,4 @@
 name: WordPress CI/CD Deployment
-
 on:
   push:
     branches:
@@ -8,7 +7,7 @@ on:
 jobs:
   trigger-terraform:
     uses: ./.github/workflows/terraform-deploy.yml
-
+  
   trigger-ansible:
     needs: trigger-terraform
     uses: ./.github/workflows/ansible-configure.yml
