@@ -1,0 +1,32 @@
+---
+- name: Create monitoring directory
+  file:
+    path: "{{ monitoring_root }}"
+    state: directory
+    mode: 0755
+
+- name: Generate Prometheus configuration
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ monitoring_root }}/prometheus.yml"
+    mode: 0644
+
+- name: Generate Grafana datasources
+  template:
+    src: grafana-datasources.yml.j2
+    dest: "{{ monitoring_root }}/datasources.yml"
+    mode: 0644
+
+- name: Pull monitoring images
+  docker_image:
+    name: "{{ item }}"
+    source: pull
+  loop:
+    - prom/prometheus:latest
+    - grafana/grafana:latest
+    - prom/node-exporter:latest
+
+- name: Start monitoring services
+  docker_compose:
+    project_src: "{{ monitoring_root }}"
+    state: present

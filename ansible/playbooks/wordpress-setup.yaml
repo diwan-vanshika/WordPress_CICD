@@ -1,0 +1,16 @@
+---
+- import_playbook: docker-setup.yaml  # Import tasks from docker-setup.yaml
+
+- hosts: wordpress_servers
+  become: yes
+  tasks:
+    - name: Clone WordPress project
+      git:
+        repo: "{{ github_repo }}"
+        dest: "/opt/wordpress-project"
+        version: main
+
+    - name: Set up Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: "/opt/wordpress-project"

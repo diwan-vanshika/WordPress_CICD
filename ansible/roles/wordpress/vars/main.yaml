@@ -1,0 +1,6 @@
+---
+wordpress_root: "/opt/wordpress"
+wordpress_version: "latest"
+mysql_version: "8.0"
+wordpress_db_name: "wordpress"
+wordpress_db_user: "wordpress"

@@ -1,0 +1,25 @@
+---
+- name: Update system packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Install essential system packages
+  apt:
+    name:
+      - git
+      - wget
+      - curl
+      - unzip
+      - zip
+      - ca-certificates
+      - gnupg
+      - lsb-release
+    state: present
+
+- name: Create project directory
+  file:
+    path: "{{ project_root }}"
+    state: directory
+    mode: 0755

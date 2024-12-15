@@ -1,0 +1,12 @@
+---
+# Global variables
+github_repo: "https://github.com/diwan-vanshika/WordPress_CICD.git"
+project_root: "/opt/wordpress-project"
+
+# Docker and WordPress configuration
+wordpress_version: "latest"
+mysql_version: "8.0"
+
+# Monitoring tools
+prometheus_version: "v2.30.3"
+grafana_version: "8.1.5"

@@ -1,0 +1,4 @@
+---
+monitoring_root: "/opt/monitoring"
+prometheus_version: "latest"
+grafana_version: "latest"

@@ -1,0 +1,8 @@
+---
+- hosts: wordpress_servers
+  become: yes
+  roles:
+    - common
+    - docker
+    - wordpress
+    - monitoring

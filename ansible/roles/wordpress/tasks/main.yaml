@@ -1,0 +1,28 @@
+---
+- name: Create WordPress project directory
+  file:
+    path: "{{ wordpress_root }}"
+    state: directory
+    mode: 0755
+
+- name: Generate WordPress configuration
+  template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_root }}/wp-config.php"
+    mode: 0644
+
+- name: Create Docker Compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ wordpress_root }}/docker-compose.yml"
+    mode: 0644
+
+- name: Pull WordPress and MySQL images
+  docker_compose:
+    project_src: "{{ wordpress_root }}"
+    pull: yes
+
+- name: Start WordPress services
+  docker_compose:
+    project_src: "{{ wordpress_root }}"
+    state: present
