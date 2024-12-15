@@ -1,8 +1,19 @@
+name: WordPress CI/CD Deployment
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull request to main branch
+
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -13,6 +24,8 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.5.0"  # You can specify the version you need
 
       - name: Terraform Init
         run: terraform init
@@ -20,4 +33,8 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+        working-directory: ./terraform
+
+      - name: Output Terraform state
+        run: terraform output
         working-directory: ./terraform
