@@ -10,5 +10,5 @@ jobs:
     uses: ./.github/workflows/terraform-deploy.yml
 
   trigger-ansible:
-    uses: ./.github/workflows/ansible-configure.yml
     needs: trigger-terraform
+    uses: ./.github/workflows/ansible-configure.yml
