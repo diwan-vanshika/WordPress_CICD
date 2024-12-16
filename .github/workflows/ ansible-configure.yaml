@@ -2,7 +2,10 @@ name: Ansible WordPress Deployment
 
 on:
   workflow_dispatch:  # Allows manual triggering
-  workflow_call:      # Allows calling from other workflows
+  workflow_run:
+    workflows: ["Terraform Deploy"]
+    types:
+      - completed
 
 secrets:
   AWS_ACCESS_KEY_ID:
@@ -41,7 +44,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/wordpress-key
           chmod 600 ~/.ssh/wordpress-key
-          ssh-keygen -l -f ~/.ssh/wordpress-key || echo "SSH Key verification failed"
+          ssh-keygen -l -f ~/.ssh/wordpress-key
 
       - name: Fetch EC2 Instance IP
         run: |
