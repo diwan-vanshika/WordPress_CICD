@@ -7,14 +7,14 @@ on:
 
 jobs:
   trigger-terraform:
-    uses: /Users/vanshika/Desktop/wordpress-cicd-project/.github/workflows/terraform-deploy.yaml
+    uses: ./.github/workflows/terraform-deploy.yaml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   trigger-ansible:
     needs: trigger-terraform  # Ensures ansible-configure runs only after terraform-deploy completes
-    uses: /Users/vanshika/Desktop/wordpress-cicd-project/.github/workflows/ ansible-configure.yaml
+    uses: ./.github/workflows/ansible-configure.yaml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
