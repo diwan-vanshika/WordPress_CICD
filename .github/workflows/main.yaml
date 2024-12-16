@@ -3,24 +3,18 @@ name: WordPress CI/CD Deployment
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
-  pull_request:
-    branches:
-      - main  # Trigger on pull request to main branch
+      - main
 
 jobs:
   trigger-terraform:
-    uses: ./.github/workflows/terraform-deploy.yaml
-    with:
-      aws-region: us-east-1
+    uses: /Users/vanshika/Desktop/wordpress-cicd-project/.github/workflows/terraform-deploy.yaml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   trigger-ansible:
-    needs: trigger-terraform
-    uses: ./.github/workflows/ansible-configure.yaml
+    needs: trigger-terraform  # Ensures ansible-configure runs only after terraform-deploy completes
+    uses: /Users/vanshika/Desktop/wordpress-cicd-project/.github/workflows/ ansible-configure.yaml
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
